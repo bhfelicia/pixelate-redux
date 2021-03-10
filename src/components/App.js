@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { store, addRow, selectColor, draw } from '../store';
+import Table from './Table';
 
 class App extends Component {
   constructor() {
     super();
     this.state = store.getState();
+    this.draw = this.draw.bind(this);
   }
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => {
@@ -23,6 +25,8 @@ class App extends Component {
   }
   render() {
     const { grid } = this.state;
+    const { draw } = this;
+    //console.log('App:', draw);
     return (
       <div id='pixelate'>
         <h1>Pixelate</h1>
@@ -43,22 +47,7 @@ class App extends Component {
             <option value='brown'>Brown</option>
           </select>
         </div>
-        <table>
-          <tbody>
-            {grid.map((row, rowIdx) => (
-              <tr key={`${row}-${rowIdx}`} value={`${rowIdx}`}>
-                {row.map((color, cellIdx) => (
-                  <td
-                    key={`${color}-${cellIdx}`}
-                    className={color}
-                    value={`${cellIdx}`}
-                    onClick={() => this.draw(rowIdx, cellIdx)}
-                  ></td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table grid={grid} draw={draw} />
       </div>
     );
   }
